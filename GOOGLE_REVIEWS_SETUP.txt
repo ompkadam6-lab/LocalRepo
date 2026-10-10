@@ -1,0 +1,35 @@
+GOOGLE REVIEWS - SETUP
+
+This feature is optional. The website continues to work without a Google API key.
+
+1) Run GOOGLE_REVIEWS_MIGRATION.sql in the existing defaultdb database.
+
+2) In Google Cloud, enable Places API (New) and create an API key.
+   Restrict the key to the Places API where practical.
+
+3) Set the API key as an environment variable on the same computer that runs Flask.
+
+Windows PowerShell:
+    $env:GOOGLE_PLACES_API_KEY="YOUR_GOOGLE_API_KEY"
+    python app.py
+
+Windows CMD:
+    set GOOGLE_PLACES_API_KEY=YOUR_GOOGLE_API_KEY
+    python app.py
+
+The API key stays server-side and is NOT exposed in the HTML/JavaScript.
+
+The first time a user loads Google reviews for a heritage site, the app can use
+Google Places API (New) Text Search to find a matching Place ID and cache it in
+heritage_sites.GooglePlaceID. Subsequent review loads use Place Details (New).
+
+IMPORTANT:
+- Do not scrape Google Maps.
+- Reviews and Google Maps links are served through Google's Places API.
+- Google requires author attribution when displaying review content.
+- Review fields are in Google's Enterprise + Atmosphere pricing tier, so API
+  billing/usage rules apply. Test the feature with a small number of requests.
+
+WITHOUT AN API KEY:
+The heritage page still provides a Read on Google Maps button. Clicking
+Load Google Reviews explains that the API is not configured.

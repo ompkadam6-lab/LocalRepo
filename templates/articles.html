@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Stories | Mira-Bhayandar Heritage{% endblock %}
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">STORIES & KNOWLEDGE</span>
+    <h1>Stories from Mira-Bhayandar</h1>
+    <p>History, crafts and cultural stories connected to the region.</p>
+</section>
+<section class="section">
+<div class="story-grid">
+{% for article in articles %}
+<article class="story-card">
+    <img src="{{ article.CoverImageURL }}" alt="{{ article.Title }}">
+    <div>
+        <span class="eyebrow">{{ article.Category }}</span>
+        <h3>{{ article.Title }}</h3>
+        <p>{{ article.Summary }}</p>
+        <small>By {{ article.AuthorName or 'Heritage MB Team' }}</small>
+    </div>
+</article>
+{% endfor %}
+</div>
+</section>
+{% endblock %}

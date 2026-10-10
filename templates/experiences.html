@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Experiences | Mira-Bhayandar Heritage{% endblock %}
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">EXPERIENCE CULTURE</span>
+    <h1>Things to do</h1>
+    <p>Walk, learn, create and connect with the people who keep local culture alive.</p>
+</section>
+<section class="section">
+<div class="experience-grid">
+{% for e in experiences %}
+<article class="experience-card">
+    <img src="{{ e.ImageURL }}" alt="{{ e.Title }}">
+    <div class="experience-body">
+        <span class="pill dark-pill">{{ e.ExperienceType }}</span>
+        <h3>{{ e.Title }}</h3>
+        <p>{{ e.Description }}</p>
+        <div class="meta"><span>⏱ {{ e.Duration }}</span><strong>₹{{ "%.0f"|format(e.Price|float) }}</strong></div>
+        {% if e.ArtisanName %}<small>With {{ e.ArtisanName }}</small>{% endif %}
+    </div>
+</article>
+{% endfor %}
+</div>
+</section>
+{% endblock %}

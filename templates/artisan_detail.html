@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ artisan.ArtisanName }} | Artisan{% endblock %}
+{% block content %}
+<section class="page-header compact">
+    <span class="eyebrow">{{ artisan.CraftCategory or 'TRADITIONAL CRAFT' }}</span>
+    <h1>{{ artisan.ArtisanName }}</h1>
+    <p>{{ artisan.CraftName }} • 📍 {{ artisan.Location }}</p>
+    <div class="rating big">★ {{ "%.1f"|format(artisan.Rating|float) }} / 5</div>
+</section>
+
+<section class="detail-content">
+    <div class="detail-main">
+        <h2>About the craft</h2>
+        <p>{{ artisan.CraftDescription or 'A local traditional craft practiced and preserved by skilled artisans.' }}</p>
+
+        <h2>Gallery</h2>
+        <div class="gallery">
+            {% for image in gallery %}
+            <img src="{{ image.ImageURL }}" alt="{{ image.Caption or artisan.ArtisanName }}">
+            {% endfor %}
+        </div>
+
+        {% if experiences %}
+        <h2>Experiences</h2>
+        {% for e in experiences %}
+        <div class="content-card">
+            <span class="eyebrow">{{ e.ExperienceType }}</span>
+            <h3>{{ e.Title }}</h3>
+            <p>{{ e.Description }}</p>
+            <strong>₹{{ "%.0f"|format(e.Price|float) }} • {{ e.Duration }}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <h2>Reviews</h2>
+        {% for review in reviews %}
+        <div class="review">
+            <strong>{{ review.Name }}</strong>
+            <span class="rating">★ {{ review.Rating }}/5</span>
+            <p>{{ review.Comment }}</p>
+        </div>
+        {% else %}
+        <p class="muted-text">No reviews yet.</p>
+        {% endfor %}
+    </div>
+
+    <aside class="sidebar-card">
+        <span class="eyebrow">ARTISAN PROFILE</span>
+        <h3>{{ artisan.ExperienceYears }} years of experience</h3>
+        <p>Location: {{ artisan.Location }}</p>
+        <p>Craft: {{ artisan.CraftName }}</p>
+        <a class="button" href="{{ url_for('experiences_page') }}">Explore Experiences</a>
+    </aside>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Videos | Mira-Bhayandar Heritage{% endblock %}
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">WATCH & DISCOVER</span>
+    <h1>Cultural videos</h1>
+    <p>Visual stories and learning resources about local heritage and crafts.</p>
+</section>
+<section class="section">
+<div class="video-grid">
+{% for video in videos %}
+<article class="video-card">
+    <img src="{{ video.ThumbnailURL }}" alt="{{ video.Title }}">
+    <div>
+        <span class="eyebrow">{{ video.Category }}</span>
+        <h3>{{ video.Title }}</h3>
+        <p>{{ video.Description }}</p>
+        <a class="button small" href="{{ video.VideoURL }}" target="_blank">Watch / Explore →</a>
+    </div>
+</article>
+{% endfor %}
+</div>
+</section>
+{% endblock %}

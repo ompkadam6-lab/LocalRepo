@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Local Artisans | Mira-Bhayandar{% endblock %}
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">PEOPLE BEHIND THE CRAFT</span>
+    <h1>Meet local artisans</h1>
+    <p>Discover skilled creators and the traditional crafts they keep alive.</p>
+</section>
+<section class="section">
+    <div class="card-grid">
+    {% for artisan in artisans %}
+        <a class="artisan-profile-card" href="{{ url_for('artisan_detail', artisan_id=artisan.ArtisanID) }}">
+            <div class="large-avatar">{{ artisan.ArtisanName[:1] }}</div>
+            <div>
+                <span class="eyebrow">{{ artisan.CraftCategory or 'CRAFT' }}</span>
+                <h3>{{ artisan.ArtisanName }}</h3>
+                <p>{{ artisan.CraftName or 'Traditional craft practitioner' }}</p>
+                <p>📍 {{ artisan.Location }}</p>
+                <div class="rating">★ {{ "%.1f"|format(artisan.Rating|float) }} <span>• {{ artisan.ExperienceYears }} years</span></div>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+</section>
+{% endblock %}

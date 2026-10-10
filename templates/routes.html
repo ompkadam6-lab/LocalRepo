@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Cultural Route Planner{% endblock %}
+{% block content %}
+<section class="page-header">
+    <span class="eyebrow">GRAPH ROUTING • DIJKSTRA • MULTI-STOP</span>
+    <h1>Build your cultural trail</h1>
+    <p>
+        Choose a starting point, one or more cultural stops, and a destination.
+        The system uses Dijkstra's algorithm to calculate the shortest connected
+        path and a practical nearest-neighbor heuristic to order your selected stops.
+    </p>
+</section>
+
+<section class="route-planner route-planner-wide">
+<form method="get">
+    <label>START LOCATION</label>
+    <select name="start" required>
+        <option value="">Choose starting point</option>
+        {% for site in sites %}
+        <option value="{{ site.SiteID }}" {% if start == site.SiteID %}selected{% endif %}>
+            {{ site.SiteName }}{% if site.Location %} — {{ site.Location }}{% endif %}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label>INTERMEDIATE STOPS <span class="label-note">Select multiple</span></label>
+    <select name="stops" multiple size="6" class="multi-select">
+        {% for site in sites %}
+        <option value="{{ site.SiteID }}" {% if site.SiteID in selected_stops %}selected{% endif %}>
+            {{ site.SiteName }}{% if site.Location %} — {{ site.Location }}{% endif %}
+        </option>
+        {% endfor %}
+    </select>
+    <p class="form-help">
+        Hold <strong>Ctrl</strong> on Windows or <strong>Command</strong> on Mac while selecting multiple locations.
+        You can choose up to 9 intermediate stops for Google Maps hand-off.
+    </p>
+
+    <label>DESTINATION</label>
+    <select name="destination" required>
+        <option value="">Choose destination</option>
+        {% for site in sites %}
+        <option value="{{ site.SiteID }}" {% if destination == site.SiteID %}selected{% endif %}>
+            {{ site.SiteName }}{% if site.Location %} — {{ site.Location }}{% endif %}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button class="button" type="submit">Optimize &amp; Calculate Route</button>
+</form>
+
+{% if error_message %}
+<div class="error-message route-error">{{ error_message }}</div>
+{% endif %}
+
+{% if route_names %}
+<div class="route-result">
+    <span class="eyebrow">OPTIMIZED CULTURAL TRAIL</span>
+    <h2>{{ route_distance|round(1) }} km</h2>
+
+    <p class="route-summary">
+        <strong>{{ start_name }}</strong>
+        {% if ordered_stop_names %}
+            <span>→</span>
+            {{ ordered_stop_names|join(' → ') }}
+        {% endif %}
+        <span>→</span>
+        <strong>{{ destination_name }}</strong>
+    </p>
+
+    <div class="timeline timeline-vertical">
+    {% for name in route_names %}
+        <div class="timeline-item timeline-item-large">
+            <span>{{ loop.index }}</span>
+            <strong>{{ name }}</strong>
+        </div>
+    {% endfor %}
+    </div>
+
+    {% if google_maps_url %}
+    <a class="button maps-button" href="{{ google_maps_url }}" target="_blank" rel="noopener">
+        🗺 Navigate this route with Google Maps
+    </a>
+    <p class="route-note">
+        The website calculates the cultural sequence using the project graph and Dijkstra's algorithm.
+        Google Maps then handles live road navigation and traffic.
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+</section>
+
+<section class="section muted route-explainer">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">HOW IT WORKS</span>
+            <h2>From your choices to a practical cultural trail</h2>
+        </div>
+    </div>
+    <div class="card-grid">
+        <div class="content-card route-step-card">
+            <strong>01 · Select locations</strong>
+            <p>Choose your start, multiple cultural stops and final destination.</p>
+        </div>
+        <div class="content-card route-step-card">
+            <strong>02 · Dijkstra</strong>
+            <p>Shortest graph paths are calculated between consecutive points.</p>
+        </div>
+        <div class="content-card route-step-card">
+            <strong>03 · Optimize order</strong>
+            <p>A nearest-neighbor heuristic chooses the next unvisited stop.</p>
+        </div>
+        <div class="content-card route-step-card">
+            <strong>04 · Navigate</strong>
+            <p>The resulting cultural sequence is handed to Google Maps.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
